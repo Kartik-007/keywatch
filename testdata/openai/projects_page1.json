@@ -1,0 +1,17 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "proj_support",
+      "object": "organization.project",
+      "name": "Support bot",
+      "created_at": 1735689600,
+      "archived_at": null,
+      "status": "active",
+      "external_key_id": null
+    }
+  ],
+  "first_id": "proj_support",
+  "last_id": "proj_support",
+  "has_more": true
+}

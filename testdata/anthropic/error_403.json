@@ -1,0 +1,8 @@
+{
+  "type": "error",
+  "error": {
+    "type": "permission_error",
+    "message": "This API key does not have permission to access the Admin API."
+  },
+  "request_id": "req_011CTestRequestId0000000"
+}

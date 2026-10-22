@@ -1,0 +1,28 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "organization.project.api_key",
+      "redacted_value": "{{OPENAI_2_HINT}}",
+      "name": "old laptop",
+      "created_at": 1748822400,
+      "expires_at": null,
+      "last_used_at": null,
+      "id": "key_research01",
+      "owner_project_access": "inactive",
+      "owner": {
+        "type": "user",
+        "user": {
+          "id": "user_research",
+          "name": "Former Teammate",
+          "email": "former@example.com",
+          "role": "member",
+          "created_at": 1748736000
+        }
+      }
+    }
+  ],
+  "first_id": "key_research01",
+  "last_id": "key_research01",
+  "has_more": false
+}
