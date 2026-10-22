@@ -13,6 +13,8 @@ import (
 	"github.com/Kartik-007/keywatch/internal/inventory"
 )
 
+var providerName = map[string]string{core.OpenAI: "OpenAI", core.Anthropic: "Anthropic"}
+
 var limitURL = map[string]string{
 	core.OpenAI:    "platform.openai.com/settings/organization/limits",
 	core.Anthropic: "platform.claude.com/settings/limits",
@@ -65,7 +67,7 @@ func From(r inventory.Result, cfg *config.Config, now time.Time) []core.Finding 
 	for p, ids := range r.Uncapped {
 		for _, id := range ids {
 			add(core.Finding{Code: "F4", Severity: core.Medium, KeyID: id,
-				Title: fmt.Sprintf("No spending cap on %s project %q", p, id),
+				Title: fmt.Sprintf("No spending cap on %s project %q", providerName[p], id),
 				Fix:   "set one: " + limitURL[p]})
 		}
 	}

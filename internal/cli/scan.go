@@ -112,7 +112,16 @@ func runScan(cmd *cobra.Command, _ []string) error {
 		fmt.Println()
 	}
 	fmt.Println()
-	fmt.Println(ui.Receipt(r.ReadFrom, nil))
+	var readFrom []string
+	for _, n := range r.ReadFrom {
+		if p, ok := platformNames[n]; ok {
+			n = p
+		} else {
+			n = titleCase(n)
+		}
+		readFrom = append(readFrom, n)
+	}
+	fmt.Println(ui.Receipt(readFrom, nil))
 	fmt.Println()
 	return nil
 }
@@ -124,11 +133,17 @@ func printKey(k core.Key) {
 		if k.Spend.Approx {
 			approx = "≈"
 		}
-		head += ui.Dim.Render(fmt.Sprintf("   %s$%.2f today · normal %s$%.2f/day", approx, k.Spend.Today, approx, k.Spend.DailyP50))
+		today := fmt.Sprintf("   %s$%.2f today", approx, k.Spend.Today)
+		if k.Spend.Today > 5 && k.Spend.Today > 3*k.Spend.DailyP50 {
+			today = ui.Red.Render(today + " ⚠")
+		} else {
+			today = ui.Dim.Render(today)
+		}
+		head += today + ui.Dim.Render(fmt.Sprintf(" · normal %s$%.2f/day", approx, k.Spend.DailyP50))
 	}
 	fmt.Println(head)
 	if len(k.Locations) == 0 {
-		fmt.Printf("  %-14s %s\n", "", ui.Yellow.Render("not found anywhere (active at "+k.Provider+")"))
+		fmt.Printf("  %-14s %s\n", "", ui.Yellow.Render("not found anywhere (still active at "+titleCase(k.Provider)+")"))
 	}
 	for _, l := range k.Locations {
 		where := l.Where

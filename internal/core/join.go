@@ -47,7 +47,7 @@ func Join(found []FoundSecret, remote []ProviderKey) []Key {
 		}
 		keys = append(keys, Key{
 			ID: Last4(r.Hint), Label: r.Name, Provider: r.Provider,
-			Redacted: r.Hint, Remote: &r,
+			Redacted: Redact(r.Hint), Remote: &r,
 		})
 	}
 	sort.SliceStable(keys, func(i, j int) bool { return len(keys[i].Locations) > len(keys[j].Locations) })
@@ -61,20 +61,12 @@ func Join(found []FoundSecret, remote []ProviderKey) []Key {
 func attachNameOnly(keys []Key, nameOnly []FoundSecret) []Key {
 	unverified := map[string]int{} // provider -> index in keys
 	for _, f := range nameOnly {
-		match := -1
-		for i, k := range keys {
-			if k.Provider != f.Provider || k.ID == "?" {
-				continue
-			}
-			for _, l := range k.Locations {
-				if l.Var != "" && l.Var == f.Location.Var {
-					if match >= 0 && match != i {
-						match = -2
-					} else if match == -1 {
-						match = i
-					}
-				}
-			}
+		// GitHub secrets belong to the repo being scanned, so a variable of
+		// the same name in local files is the strongest signal. Fall back to
+		// any location.
+		match := uniqueVarMatch(keys, f, true)
+		if match < 0 {
+			match = uniqueVarMatch(keys, f, false)
 		}
 		if match >= 0 {
 			keys[match].Locations = append(keys[match].Locations, f.Location)
@@ -89,6 +81,27 @@ func attachNameOnly(keys []Key, nameOnly []FoundSecret) []Key {
 		keys[i].Locations = append(keys[i].Locations, f.Location)
 	}
 	return keys
+}
+
+// uniqueVarMatch returns the index of the only key that uses f's variable
+// name, or -1 if none or several do.
+func uniqueVarMatch(keys []Key, f FoundSecret, localOnly bool) int {
+	match := -1
+	for i, k := range keys {
+		if k.Provider != f.Provider || k.ID == "?" {
+			continue
+		}
+		for _, l := range k.Locations {
+			if l.NameOnly || (localOnly && l.Source != "local") || l.Var == "" || l.Var != f.Location.Var {
+				continue
+			}
+			if match >= 0 && match != i {
+				return -1
+			}
+			match = i
+		}
+	}
+	return match
 }
 
 // labelFor names a key after the first deployed place it lives, falling back

@@ -41,13 +41,12 @@ func sources() []source.Source {
 			Provider: core.Anthropic, Value: testutil.Anthropic1,
 			Location: core.Location{Source: "vercel", Where: "landing-chat · production", Var: varAnthropic},
 		}}},
-		// GitHub secrets are write-only, so the real source can only match by
-		// name. The demo attaches this one to …a91f, the key the name points
-		// at, and marks it NameOnly so output says the value wasn't checked.
+		// GitHub secrets are write-only, so like the real source this returns
+		// no value. core.Join attaches it to …a91f by variable name.
 		fakeSource{
 			name: "github",
 			secrets: []core.FoundSecret{{
-				Provider: core.OpenAI, Value: testutil.OpenAI1,
+				Provider: core.OpenAI,
 				Location: core.Location{Source: "github", Where: "acme/support-bot · Actions secret", Var: varOpenAI, NameOnly: true},
 			}},
 			notes: []string{"GitHub secrets are write-only: matched 1 by name, value not checked."},
