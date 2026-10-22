@@ -1,0 +1,21 @@
+{
+  "e-prod/s-api": {
+    "OPENAI_API_KEY": "{{OPENAI_1}}",
+    "NODE_ENV": "production",
+    "DATABASE_URL": "postgres://user:pass@db.railway.internal:5432/app"
+  },
+  "e-prod/s-worker": {
+    "OPENAI_API_KEY": "{{OPENAI_1}}",
+    "ANTHROPIC_API_KEY": ""
+  },
+  "e-prod/": {},
+  "e-stg/": {},
+  "e-stg/s-api": { "NODE_ENV": "staging" },
+  "e-landing-prod/s-web": {
+    "CLAUDE_KEY": "{{ANTHROPIC_1}}",
+    "AGENT_CONFIG": "{\"model\":\"gpt-5\",\"key\":\"{{OPENAI_2}}\"}"
+  },
+  "e-landing-prod/": {
+    "SHARED_OPENAI_FALLBACK": ""
+  }
+}

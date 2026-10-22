@@ -1,0 +1,74 @@
+{
+  "/v2/teams": {
+    "teams": [{ "id": "team_acme", "slug": "acme", "name": "Acme", "limited": false }],
+    "pagination": { "count": 1, "next": null, "prev": null }
+  },
+  "/v10/projects": {
+    "projects": [{ "id": "prj_landing", "name": "landing-chat", "accountId": "user_1" }],
+    "pagination": { "count": 1, "next": 1760000000000, "prev": null }
+  },
+  "/v10/projects?until=1760000000000": {
+    "projects": [{ "id": "prj_blog", "name": "blog", "accountId": "user_1" }],
+    "pagination": { "count": 1, "next": null, "prev": 1760000000001 }
+  },
+  "/v10/projects?teamId=team_acme": {
+    "projects": [
+      { "id": "prj_agent", "name": "support-agent", "accountId": "team_acme" },
+      { "id": "prj_broken", "name": "broken-app", "accountId": "team_acme" }
+    ],
+    "pagination": { "count": 2, "next": null, "prev": null }
+  },
+  "/v10/projects/prj_landing/env": {
+    "envs": [
+      {
+        "id": "env_1", "key": "OPENAI_API_KEY", "type": "encrypted", "decrypted": true,
+        "value": "{{OPENAI_1}}", "target": ["production", "preview"], "securityIssues": []
+      },
+      {
+        "id": "env_2", "key": "ANTHROPIC_API_KEY", "type": "sensitive", "decrypted": false,
+        "value": "", "target": ["production"], "securityIssues": []
+      },
+      {
+        "id": "env_3", "key": "NEXT_PUBLIC_SITE_URL", "type": "plain",
+        "value": "https://landing.example.com", "target": ["production"], "securityIssues": []
+      },
+      {
+        "id": "env_4", "key": "VERCEL_URL", "type": "system",
+        "value": "", "target": ["production"], "securityIssues": []
+      }
+    ]
+  },
+  "/v10/projects/prj_blog/env": { "envs": [] },
+  "/v10/projects/prj_agent/env?teamId=team_acme": {
+    "envs": [
+      {
+        "id": "env_5", "key": "CLAUDE_API_KEY", "type": "encrypted", "decrypted": true,
+        "value": "{{ANTHROPIC_1}}", "target": "production", "securityIssues": []
+      },
+      {
+        "id": "env_6", "key": "MODEL_KEY", "type": "plain",
+        "value": "{{OPENAI_2}}", "target": [], "customEnvironmentIds": ["env_custom_qa"], "securityIssues": []
+      }
+    ]
+  },
+  "/v10/projects/prj_agent/env?teamId=team_acme#nodecrypt": {
+    "envs": [
+      {
+        "id": "env_5", "key": "CLAUDE_API_KEY", "type": "encrypted", "decrypted": false,
+        "value": "ENCRYPTED-BLOB-NOT-A-KEY", "target": "production", "securityIssues": []
+      },
+      {
+        "id": "env_6", "key": "MODEL_KEY", "type": "plain",
+        "value": "{{OPENAI_2}}", "target": [], "customEnvironmentIds": ["env_custom_qa"], "securityIssues": []
+      }
+    ]
+  },
+  "/v10/projects/prj_broken/env?teamId=team_acme": {
+    "status": 500,
+    "error": { "code": "internal_server_error", "message": "An unexpected internal error occurred" }
+  },
+  "challenge": {
+    "status": 403,
+    "error": { "code": "challenge_required", "message": "Sensitive Environment Variables require fresh authentication." }
+  }
+}
