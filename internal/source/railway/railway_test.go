@@ -46,6 +46,11 @@ func setup(t *testing.T, fail ...string) {
 	}
 	projects := testdata(t, "projects.json")
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Authorization") == "Bearer expired" {
+			// What Railway actually returns for an expired login (seen live).
+			w.Write([]byte(`{"data":null,"errors":[{"message":"Not Authorized"}]}`))
+			return
+		}
 		if r.Header.Get("Authorization") != "Bearer "+testToken {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
@@ -161,6 +166,15 @@ func TestCollectBadLogin(t *testing.T) {
 	_, _, err := Railway{}.Collect(context.Background())
 	if err == nil || !strings.Contains(err.Error(), "railway login") {
 		t.Fatalf("want a login hint, got %v", err)
+	}
+}
+
+func TestCollectExpiredLogin(t *testing.T) {
+	setup(t)
+	t.Setenv("RAILWAY_API_TOKEN", "expired")
+	_, _, err := Railway{}.Collect(context.Background())
+	if err == nil || !strings.Contains(err.Error(), "login has expired") || !strings.Contains(err.Error(), "railway login") {
+		t.Fatalf("want an expired-login hint, got %v", err)
 	}
 }
 

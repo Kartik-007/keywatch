@@ -25,7 +25,7 @@ type Options struct {
 type Result struct {
 	Keys      []core.Key
 	Notes     []string
-	ReadFrom  []string // for the receipt
+	ReadFrom  []string // for the receipt: every host contacted, "x (failed)" if it errored
 	Connected []string // providers with an admin key
 	Uncapped  map[string][]string
 	Errors    []error // non-fatal: one source failing never stops the run
@@ -48,6 +48,9 @@ func Load(ctx context.Context, o Options) Result {
 		sec, notes, err := s.Collect(ctx)
 		if err != nil {
 			r.Errors = append(r.Errors, err)
+			if s.Name() != "local" {
+				r.ReadFrom = append(r.ReadFrom, s.Name()+" (failed)")
+			}
 			continue
 		}
 		if s.Name() != "local" {
@@ -65,12 +68,13 @@ func Load(ctx context.Context, o Options) Result {
 			continue
 		}
 		r.Connected = append(r.Connected, p.Name())
-		r.ReadFrom = append(r.ReadFrom, p.Name())
 		keys, err := p.ListKeys(ctx, ak)
 		if err != nil {
 			r.Errors = append(r.Errors, err)
+			r.ReadFrom = append(r.ReadFrom, p.Name()+" (failed)")
 			continue
 		}
+		r.ReadFrom = append(r.ReadFrom, p.Name())
 		remote = append(remote, keys...)
 		if u, err := p.Uncapped(ctx, ak); err == nil && len(u) > 0 {
 			r.Uncapped[p.Name()] = u

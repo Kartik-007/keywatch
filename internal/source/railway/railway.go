@@ -122,6 +122,9 @@ func (Railway) Collect(ctx context.Context) ([]core.FoundSecret, []string, error
 	}
 	projects, err := listProjects(ctx, tok)
 	if err != nil {
+		if errors.Is(err, errLoginExpired) {
+			return nil, nil, fmt.Errorf("railway: %w", err)
+		}
 		return nil, nil, fmt.Errorf("railway: listing projects: %w", err)
 	}
 
@@ -282,7 +285,7 @@ func gql(ctx context.Context, tok, query string, vars map[string]any, out any) e
 	}
 	jsonErr := json.Unmarshal(b, &env)
 	if resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
-		return fmt.Errorf("Railway rejected the saved login (HTTP %d); run `railway login`", resp.StatusCode)
+		return errLoginExpired
 	}
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("HTTP %d%s", resp.StatusCode, firstMessage(env.Errors))
@@ -291,10 +294,17 @@ func gql(ctx context.Context, tok, query string, vars map[string]any, out any) e
 		return fmt.Errorf("unexpected response: %w", jsonErr)
 	}
 	if len(env.Errors) > 0 {
-		return errors.New(strings.TrimPrefix(firstMessage(env.Errors), ": "))
+		msg := strings.TrimPrefix(firstMessage(env.Errors), ": ")
+		// An expired login comes back as HTTP 200 with a GraphQL error.
+		if l := strings.ToLower(msg); strings.Contains(l, "not authorized") || strings.Contains(l, "unauthorized") {
+			return errLoginExpired
+		}
+		return errors.New(msg)
 	}
 	return json.Unmarshal(env.Data, out)
 }
+
+var errLoginExpired = errors.New("your Railway login has expired; run `railway login`, then scan again")
 
 func firstMessage(errs []struct {
 	Message string `json:"message"`

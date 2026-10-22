@@ -38,7 +38,15 @@ func (Local) Collect(ctx context.Context) ([]core.FoundSecret, []string, error) 
 	if err != nil {
 		return nil, nil, err
 	}
-	tracked := gitTracked(ctx, root)
+	// A folder can hold several repos (e.g. backend/ and frontend/ side by
+	// side), so committed-ness and history are checked per repo.
+	repos := findRepos(root)
+	tracked := map[string]bool{}
+	for _, repo := range repos {
+		for f := range gitTracked(ctx, filepath.Join(root, repo)) {
+			tracked[filepath.Join(repo, f)] = true
+		}
+	}
 	var out []core.FoundSecret
 	seenInTree := map[string]bool{}
 
@@ -74,8 +82,33 @@ func (Local) Collect(ctx context.Context) ([]core.FoundSecret, []string, error) 
 		return out, nil, err
 	}
 
-	hist, notes := gitHistory(ctx, root, seenInTree)
-	return append(out, hist...), notes, nil
+	var notes []string
+	for _, repo := range repos {
+		hist, n := gitHistory(ctx, filepath.Join(root, repo), repo, seenInTree)
+		out = append(out, hist...)
+		notes = append(notes, n...)
+	}
+	return out, notes, nil
+}
+
+// findRepos returns git repos to check, as paths relative to root: "." for
+// root itself (or the repo it sits inside), plus every repo nested below it.
+func findRepos(root string) []string {
+	repos := []string{"."}
+	filepath.WalkDir(root, func(p string, d os.DirEntry, err error) error {
+		if err != nil || !d.IsDir() || p == root {
+			return nil
+		}
+		if skipDirs[d.Name()] {
+			return filepath.SkipDir
+		}
+		if _, err := os.Stat(filepath.Join(p, ".git")); err == nil {
+			rel, _ := filepath.Rel(root, p)
+			repos = append(repos, rel)
+		}
+		return nil
+	})
+	return repos
 }
 
 // gitTracked returns the set of files git tracks under root, or nil outside
@@ -97,14 +130,14 @@ func gitTracked(ctx context.Context, root string) map[string]bool {
 
 // gitHistory finds keys that were committed at some point but are no longer
 // in the working tree. Bounded to 15s so huge repos don't stall the scan.
-func gitHistory(ctx context.Context, root string, skip map[string]bool) ([]core.FoundSecret, []string) {
+func gitHistory(ctx context.Context, root, prefix string, skip map[string]bool) ([]core.FoundSecret, []string) {
 	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, "git", "-C", root, "log", "--all", "-p", "--no-color",
 		"--format=commit %h", "-G", `sk-(ant-|proj-|svcacct-|admin-)|T3BlbkFJ`)
 	b, err := cmd.Output()
 	if ctx.Err() == context.DeadlineExceeded {
-		return nil, []string{"Git history scan stopped after 15s (large repo). Recent commits were checked."}
+		return nil, []string{fmt.Sprintf("Git history scan of %s stopped after 15s (large repo). Recent commits were checked.", repoName(prefix))}
 	}
 	if err != nil {
 		return nil, nil
@@ -119,8 +152,15 @@ func gitHistory(ctx context.Context, root string, skip map[string]bool) ([]core.
 		switch {
 		case strings.HasPrefix(line, "commit "):
 			commit = strings.TrimPrefix(line, "commit ")
-		case strings.HasPrefix(line, "+++ b/"):
-			file = strings.TrimPrefix(line, "+++ b/")
+		case strings.HasPrefix(line, "diff --git a/"):
+			// "diff --git a/x b/x" names the file even when it was deleted
+			// (then the "+++" line is /dev/null).
+			if i := strings.LastIndex(line, " b/"); i > 0 {
+				file = filepath.Join(prefix, line[i+3:])
+			}
+		case strings.HasPrefix(line, "+++ b/") || strings.HasPrefix(line, "--- a/") ||
+			line == "+++ /dev/null" || line == "--- /dev/null":
+			continue
 		case strings.HasPrefix(line, "+") || strings.HasPrefix(line, "-"):
 			for _, m := range core.Detect(line) {
 				if skip[m.Value] || seen[m.Value] {
@@ -135,6 +175,13 @@ func gitHistory(ctx context.Context, root string, skip map[string]bool) ([]core.
 		}
 	}
 	return out, nil
+}
+
+func repoName(prefix string) string {
+	if prefix == "." {
+		return "this repo"
+	}
+	return prefix
 }
 
 // varName guesses the variable a secret is assigned to on its line, e.g.

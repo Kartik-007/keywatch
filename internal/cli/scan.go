@@ -96,11 +96,13 @@ func runScan(cmd *cobra.Command, _ []string) error {
 	fmt.Println()
 	var readFrom []string
 	for _, n := range r.ReadFrom {
-		if p, ok := platformNames[n]; ok {
-			n = p
+		name, suffix, _ := strings.Cut(n, " ")
+		if p, ok := platformNames[name]; ok {
+			name = p
 		} else {
-			n = titleCase(n)
+			name = titleCase(name)
 		}
+		n = strings.TrimSpace(name + " " + suffix)
 		readFrom = append(readFrom, n)
 	}
 	fmt.Println(ui.Receipt(readFrom, nil))

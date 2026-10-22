@@ -60,7 +60,7 @@ func AskSecret(q string) (string, error) {
 func Receipt(readFrom []string, changed []string) string {
 	read := "Nothing left this machine"
 	if len(readFrom) > 0 {
-		read = "Read from: " + strings.Join(readFrom, ", ")
+		read = "Contacted: " + strings.Join(readFrom, ", ")
 	}
 	if len(changed) == 0 {
 		return Dim.Render("  Nothing was changed. " + read + ".")
