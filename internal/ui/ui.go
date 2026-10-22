@@ -58,7 +58,7 @@ func AskSecret(q string) (string, error) {
 
 // Receipt is the last line of every run: what was read, what was changed.
 func Receipt(readFrom []string, changed []string) string {
-	read := "nothing left this machine"
+	read := "Nothing left this machine"
 	if len(readFrom) > 0 {
 		read = "Read from: " + strings.Join(readFrom, ", ")
 	}
