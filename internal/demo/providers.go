@@ -124,7 +124,7 @@ func (p *fakeProvider) Usage(_ context.Context, _ string, from, to time.Time, bu
 
 	var out []core.UsagePoint
 	for _, k := range p.keys {
-		for i, s := range starts {
+		for _, s := range starts {
 			if s.Add(step).Before(k.CreatedAt) {
 				continue
 			}
@@ -137,9 +137,9 @@ func (p *fakeProvider) Usage(_ context.Context, _ string, from, to time.Time, bu
 				}
 			} else {
 				usd = normal / 24 * hourShape(s.Hour())
-				// The newest bucket is "the last hour", whichever way the
-				// caller cuts it (current partial hour or last full hour).
-				if k.spike > 0 && i == len(starts)-1 && t.Sub(s) < 2*time.Hour {
+				// The spike lands in the last complete hour, the one the
+				// watcher judges.
+				if k.spike > 0 && s.Equal(t.Truncate(time.Hour).Add(-time.Hour)) {
 					usd = k.spike
 				}
 			}

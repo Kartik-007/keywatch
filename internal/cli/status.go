@@ -177,7 +177,7 @@ func askPlatforms() func(source.Source) bool {
 	var avail []string
 	for _, s := range source.All() {
 		if s.Name() != "local" && s.Available() {
-			avail = append(avail, s.Name())
+			avail = append(avail, platformNames[s.Name()])
 		}
 	}
 	if len(avail) == 0 {
@@ -185,7 +185,9 @@ func askPlatforms() func(source.Source) bool {
 	}
 	ok := Yes
 	if !ok && !JSON {
-		ok = ui.Confirm("Read env vars from "+strings.Join(avail, ", ")+" using your existing logins? (read-only)", true)
+		fmt.Printf("  You're logged into %s on this machine.\n", joinAnd(avail))
+		ok = ui.Confirm("Read env vars from them too? (read-only)", true)
+		fmt.Println()
 	}
 	return func(source.Source) bool { return ok }
 }

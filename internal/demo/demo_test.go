@@ -69,7 +69,7 @@ func TestStory(t *testing.T) {
 		t.Errorf("uncapped = %v", got)
 	}
 
-	// The last hour spikes; the hours before it look normal.
+	// The last complete hour spikes; every other hour looks normal.
 	p, _ := provider.Get(core.OpenAI)
 	pts, _ := p.Usage(context.Background(), adminKey, fixed.Add(-14*24*time.Hour), fixed, "1h")
 	var last, maxBefore float64
@@ -77,7 +77,7 @@ func TestStory(t *testing.T) {
 		if pt.KeyID != "key_demo_a91f" {
 			continue
 		}
-		if pt.Start.Equal(fixed.Truncate(time.Hour)) {
+		if pt.Start.Equal(fixed.Truncate(time.Hour).Add(-time.Hour)) {
 			last = pt.USD
 		} else if pt.USD > maxBefore {
 			maxBefore = pt.USD
