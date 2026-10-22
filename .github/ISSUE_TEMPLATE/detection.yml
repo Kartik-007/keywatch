@@ -1,0 +1,54 @@
+name: It missed a key / flagged the wrong thing
+description: keywatch didn't find a key it should have, or flagged something that isn't a key.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste a full key, not even a revoked one.** The prefix shape (like `sk-proj-…`) is all we need.
+
+        Found a security problem? Don't file it here. Use [private vulnerability reporting](https://github.com/Kartik-007/keywatch/security/advisories/new) instead.
+  - type: dropdown
+    id: location
+    attributes:
+      label: Where the key lived
+      options:
+        - Local file
+        - Git history
+        - Railway
+        - Vercel
+        - GitHub
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options:
+        - OpenAI
+        - Anthropic
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: prefix
+    attributes:
+      label: Key prefix shape only
+      description: Just the start of the key, never the whole thing.
+      placeholder: e.g. sk-proj-…
+    validations:
+      required: true
+  - type: textarea
+    id: shown
+    attributes:
+      label: What keywatch showed
+      description: What you saw, and what you expected instead. Include `keywatch --version`.
+    validations:
+      required: true
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: I removed or redacted any key values. keywatch only prints redacted keys, but check your paste.
+          required: true

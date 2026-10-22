@@ -1,0 +1,14 @@
+# Default owner for everything.
+* @Kartik-007
+
+# Sensitive paths: these handle key values, stored credentials, network calls,
+# alerts, the generated workflow, CI and releases. Listed explicitly so the
+# intent is visible.
+/internal/core/      @Kartik-007
+/internal/creds/     @Kartik-007
+/internal/source/    @Kartik-007
+/internal/provider/  @Kartik-007
+/internal/alert/     @Kartik-007
+/internal/watch/     @Kartik-007
+/.github/            @Kartik-007
+/.goreleaser.yaml    @Kartik-007

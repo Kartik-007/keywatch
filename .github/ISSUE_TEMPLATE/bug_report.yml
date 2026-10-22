@@ -1,0 +1,54 @@
+name: Bug report
+description: keywatch crashed, errored, or did something it shouldn't.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found a security problem? Don't file it here. Use [private vulnerability reporting](https://github.com/Kartik-007/keywatch/security/advisories/new) instead.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `keywatch --version`.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: e.g. macOS 15.4 (arm64), Ubuntu 24.04
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command you ran
+      placeholder: e.g. keywatch status --verbose
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output with --verbose
+      description: Run the same command with `--verbose` and paste the output.
+      render: text
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: I removed or redacted any key values. keywatch only prints redacted keys, but check your paste.
+          required: true

@@ -114,6 +114,10 @@ keywatch joins all four views into one row per key.
 
 Global flags: `--json`, `--verbose`, `--demo`, `--yes` (answers read-only prompts; it never applies to changes).
 
+## Security
+
+Found a way keywatch could leak a key, or call a host it shouldn't? Report it privately as described in [SECURITY.md](SECURITY.md), not in a public issue. Never paste a real key anywhere.
+
 ## Contributing
 
 Read [AGENTS.md](AGENTS.md) first. The short version: never print or commit a full key (tests build fake ones at runtime), keep everything read-only unless the user confirms, and make sure tests run offline. Before opening a PR, run:
