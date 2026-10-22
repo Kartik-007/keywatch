@@ -12,7 +12,7 @@ On October 21, 2026, Railway [disclosed](https://status.railway.com) that attack
 
 keywatch gives you one row per key. If the same OpenAI key sits in a Railway service, a GitHub secret and a `.env` file someone committed last spring, you see it once, with all three places listed next to what it spent today.
 
-![One OpenAI key stored in Railway, a GitHub Actions secret and a committed .env.local, spending $41 in the last hour against a normal $3 a day](docs/one-key-three-places.svg)
+![How keywatch works: it finds keys in your repo and platforms, matches each one to your provider account on your machine, and checks spend hourly to alert you when a key spikes](docs/how-it-works.gif)
 
 ### Find your keys
 

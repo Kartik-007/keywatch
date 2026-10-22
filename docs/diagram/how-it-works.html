@@ -1,0 +1,183 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#F3F2EE}
+  svg{display:block}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+  .sans{font-family:"Geist",system-ui,sans-serif}
+  .lbl{font-family:"Geist Mono",monospace;font-size:15px;letter-spacing:2.6px;fill:#1C1C1C;text-anchor:middle}
+  .sub{font-family:"Geist Mono",monospace;font-size:11.5px;letter-spacing:1.6px;fill:#6F6E6A;text-anchor:middle}
+  .edge{font-family:"Geist Mono",monospace;font-size:11.5px;letter-spacing:1.6px;fill:#6F6E6A}
+  .edge.blue{fill:#2546D9}
+  .grp{font-family:"Geist Mono",monospace;font-size:16px;letter-spacing:3px;fill:#1C1C1C}
+  .icon{fill:none;stroke:#1C1C1C;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+</style></head>
+<body>
+<svg id="s" width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#DAD8D1"/>
+    </pattern>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#C2BFB7"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2546D9"/>
+    </marker>
+    <marker id="as" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#B3BEDB"/>
+    </marker>
+    <filter id="glow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="#F3F2EE"/>
+  <rect width="1600" height="900" fill="url(#dots)"/>
+
+  <!-- top bar -->
+  <circle cx="86" cy="44" r="5" fill="#2546D9"/>
+  <text x="102" y="49" class="mono" font-size="14" letter-spacing="3" fill="#1C1C1C">KEYWATCH</text>
+  <g class="mono" font-size="13" letter-spacing="1.2" fill="#9A9893">
+    <text x="250" y="49">01 Find</text>
+    <text x="348" y="49">02 Match</text>
+    <text x="456" y="49">03 Watch</text>
+    <text x="564" y="49">04 Alert</text>
+  </g>
+  <rect x="1360" y="26" width="160" height="36" rx="18" fill="#FBFBFA" stroke="#DCDAD4"/>
+  <text x="1440" y="49" class="sans" font-size="14" fill="#1C1C1C" text-anchor="middle">free · open source</text>
+
+  <!-- headline -->
+  <text x="80" y="112" class="mono" font-size="14" letter-spacing="2.8" fill="#2546D9">HOW IT WORKS</text>
+  <text x="246" y="114" class="sans" font-size="30" font-weight="600" fill="#1C1C1C" letter-spacing="-0.6">Find, match, watch, alert.</text>
+
+  <!-- card -->
+  <rect x="80" y="148" width="1440" height="712" rx="10" fill="#FCFCFB" stroke="#E6E4DF"/>
+
+  <!-- group frames -->
+  <path d="M430 266 H444 M664 266 H1130 V486 H430 V266" fill="none" stroke="#CFCCC5" stroke-width="1.4"/>
+  <text x="452" y="272" class="grp">ON YOUR MACHINE</text>
+  <path d="M690 540 H704 M874 540 H1390 V732 H690 V540" fill="none" stroke="#CFCCC5" stroke-width="1.3" stroke-dasharray="4 4"/>
+  <text x="712" y="546" class="grp">WATCH</text>
+  <text x="790" y="546" class="grp" style="fill:#2546D9">HOURLY</text>
+
+  <!-- connectors -->
+  <!-- A sources -> detect -->
+  <path id="pA" d="M341 360 H495" fill="none" stroke="#C2BFB7" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#ag)"/>
+  <text x="384" y="346" class="edge" text-anchor="middle">ENV VARS</text>
+  <!-- B detect -> match -->
+  <path id="pB" d="M581 360 H735" fill="none" stroke="#2546D9" stroke-width="1.7" stroke-dasharray="5 5" marker-end="url(#ab)"/>
+  <text x="658" y="346" class="edge blue" text-anchor="middle">FINGERPRINT</text>
+  <!-- C providers loop -> match -->
+  <path id="pC" d="M1290 319 V205 H780 V315" fill="none" stroke="#C2BFB7" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#ag)"/>
+  <text x="1035" y="193" class="edge" text-anchor="middle">REDACTED HINTS + SPEND</text>
+  <!-- D match -> keys -->
+  <path id="pD" d="M821 360 H975" fill="none" stroke="#B3BEDB" stroke-width="1.7" marker-end="url(#as)"/>
+  <text x="898" y="346" class="edge" text-anchor="middle">ONE ROW PER KEY</text>
+  <!-- E providers -> check -->
+  <path id="pE" d="M1290 466 V570" fill="none" stroke="#B3BEDB" stroke-width="1.7" marker-end="url(#as)"/>
+  <text x="1276" y="522" class="edge" text-anchor="end">HOURLY USAGE</text>
+  <!-- F check -> alert -->
+  <path id="pF" d="M1249 615 H1065" fill="none" stroke="#C2BFB7" stroke-width="1.6" marker-end="url(#ag)"/>
+  <text x="1157" y="601" class="edge" text-anchor="middle">OVER 3× NORMAL</text>
+  <!-- G alert -> you -->
+  <path id="pG" d="M979 615 H825" fill="none" stroke="#2546D9" stroke-width="1.7" stroke-dasharray="5 5" marker-end="url(#ab)"/>
+  <text x="902" y="601" class="edge blue" text-anchor="middle">EMAIL · SLACK</text>
+
+  <!-- tiles -->
+  <g id="tiles"></g>
+
+  <!-- moving dots -->
+  <g id="dots-layer"></g>
+
+  <!-- caption -->
+  <g class="sans" font-size="18.5" fill="#2A2A2A">
+    <text x="112" y="784">keywatch finds AI keys in your repo and the platforms you're logged into, and matches each one to your OpenAI or Anthropic</text>
+    <text x="112" y="811">account by its prefix and last four characters, so key values never leave your machine. Every hour, a free GitHub Action</text>
+    <text x="112" y="838">checks each key's spend against its normal and emails you when it jumps.</text>
+  </g>
+</svg>
+
+<script>
+const ICONS = {
+  folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  search: '<circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+  clock: '<circle cx="12" cy="12" r="9.5"/><path d="M12 6.5V12l3.5 2"/>',
+  bell: '<path d="M10.27 21a2 2 0 0 0 3.46 0"/><path d="M3.26 15.33A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.67C19.41 13.96 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.41 5.96-2.74 7.33"/>',
+  user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+};
+// name, cx, cy, icon, label, sub lines, blue?
+const TILES = [
+  ['sources', 300, 360, 'folder', 'SOURCES', ['REPO · RAILWAY', 'VERCEL · GITHUB']],
+  ['detect', 540, 360, 'search', 'DETECT', ['SK- PATTERNS']],
+  ['match', 780, 360, 'link', 'MATCH', ['PREFIX + LAST 4']],
+  ['keys', 1020, 360, 'list', 'KEYS', ['WHERE · AGE · SPEND']],
+  ['providers', 1290, 360, 'cloud', 'PROVIDERS', ['OPENAI · ANTHROPIC']],
+  ['check', 1290, 615, 'clock', 'CHECK', ['GITHUB ACTION']],
+  ['alert', 1020, 615, 'bell', 'ALERT', ['WITHIN THE HOUR'], true],
+  ['you', 780, 615, 'user', 'YOU', ['ACK OR DISABLE']],
+];
+const S = 82;
+const tilesG = document.getElementById('tiles');
+for (const [name, cx, cy, icon, label, subs, blue] of TILES) {
+  const x = cx - S/2, y = cy - S/2;
+  const fill = blue ? '#2546D9' : '#ECE9E4', stroke = blue ? '#2546D9' : '#E0DDD7';
+  const ic = blue ? 'stroke="#FFFFFF"' : '';
+  let h = `<g id="t-${name}">
+    <rect class="ring" x="${x-6}" y="${y-6}" width="${S+12}" height="${S+12}" rx="9" fill="none" stroke="#2546D9" stroke-width="2" opacity="0"/>
+    <rect class="box" x="${x}" y="${y}" width="${S}" height="${S}" rx="5" fill="${fill}" stroke="${stroke}"/>
+    <g class="icon" ${ic} transform="translate(${cx-13},${cy-13}) scale(1.083)">${ICONS[icon]}</g>
+    <text class="lbl" x="${cx}" y="${cy+S/2+30}">${label}</text>`;
+  subs.forEach((s, i) => h += `<text class="sub" x="${cx}" y="${cy+S/2+50+i*17}">${s}</text>`);
+  tilesG.insertAdjacentHTML('beforeend', h + '</g>');
+}
+
+// Timeline: [path id, start s, end s, tile lit on arrival]
+const LOOP = 7.2;
+const SEGS = [
+  ['pA', 0.30, 1.05, 'detect'],
+  ['pB', 1.15, 1.85, 'match'],
+  ['pC', 0.70, 2.10, 'match'],
+  ['pD', 2.30, 3.00, 'keys'],
+  ['pE', 3.40, 4.10, 'check'],
+  ['pF', 4.25, 4.95, 'alert'],
+  ['pG', 5.25, 5.95, 'you'],
+];
+const START_LIT = [['sources', 0.0], ['providers', 0.55], ['providers', 3.25]];
+const ease = u => u < .5 ? 2*u*u : 1 - Math.pow(-2*u+2, 2)/2;
+const dotsG = document.getElementById('dots-layer');
+
+function render(t) {
+  t = ((t % LOOP) + LOOP) % LOOP;
+  dotsG.innerHTML = '';
+  const lit = {};
+  const light = (name, at) => {
+    const d = t - at;
+    if (d >= 0 && d < 0.9) lit[name] = Math.max(lit[name] || 0, d < 0.15 ? d/0.15 : 1 - (d-0.15)/0.75);
+  };
+  for (const [id, a, b, tile] of SEGS) {
+    light(tile, b);
+    if (t < a || t > b) continue;
+    const p = document.getElementById(id), L = p.getTotalLength();
+    const pt = p.getPointAtLength(ease((t-a)/(b-a)) * (L - 6));
+    dotsG.insertAdjacentHTML('beforeend',
+      `<circle cx="${pt.x}" cy="${pt.y}" r="9" fill="#2546D9" opacity="0.35" filter="url(#glow)"/>
+       <circle cx="${pt.x}" cy="${pt.y}" r="5" fill="#2546D9"/>`);
+  }
+  for (const [name, at] of START_LIT) light(name, at);
+  for (const [name] of TILES) {
+    const g = document.getElementById('t-' + name), v = lit[name] || 0;
+    g.querySelector('.ring').setAttribute('opacity', (v * 0.9).toFixed(3));
+    if (name !== 'alert') g.querySelector('.box').setAttribute('stroke', v > 0.05 ? '#2546D9' : '#E0DDD7');
+  }
+}
+window.render = render;
+const m = location.hash.match(/t=([\d.]+)/);
+document.fonts.ready.then(() => { render(m ? parseFloat(m[1]) : 0); document.body.dataset.ready = '1'; });
+</script>
+</body></html>
