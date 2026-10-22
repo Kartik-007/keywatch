@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": "apikey_01OldPrototype",
+      "created_at": "2024-11-30T09:00:00Z",
+      "created_by": {
+        "id": "user_01WCz1FkmYMm4gnmykNKUu3Q",
+        "type": "user"
+      },
+      "expires_at": null,
+      "name": "old prototype",
+      "partial_key_hint": "{{ANTHROPIC_2_HINT}}",
+      "principal": null,
+      "scope": {
+        "type": "workspace",
+        "workspace_id": "wrkspc_01DefaultReal"
+      },
+      "status": "inactive",
+      "type": "api_key",
+      "workspace_id": null
+    },
+    {
+      "id": "apikey_01NoHint",
+      "created_at": "2026-01-15T12:30:00Z",
+      "created_by": null,
+      "expires_at": null,
+      "name": "federated workload",
+      "partial_key_hint": null,
+      "principal": {
+        "type": "service_account_actor",
+        "service_account_id": "svac_01Hk3R9TWxq7CfQak00OiVw4"
+      },
+      "scope": {
+        "type": "organization"
+      },
+      "status": "active",
+      "type": "api_key",
+      "workspace_id": null
+    }
+  ],
+  "first_id": "apikey_01OldPrototype",
+  "has_more": false,
+  "last_id": "apikey_01NoHint"
+}

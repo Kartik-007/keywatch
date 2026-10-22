@@ -1,0 +1,17 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "proj_research",
+      "object": "organization.project",
+      "name": "Research agent",
+      "created_at": 1748736000,
+      "archived_at": null,
+      "status": "active",
+      "external_key_id": null
+    }
+  ],
+  "first_id": "proj_research",
+  "last_id": "proj_research",
+  "has_more": false
+}
