@@ -1,0 +1,4 @@
+/keywatch
+/dist/
+*.test
+.DS_Store
