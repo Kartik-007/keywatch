@@ -1,0 +1,105 @@
+{
+  "data": {
+    "me": {
+      "workspaces": [
+        {
+          "id": "ws-personal",
+          "name": "Kartik's Projects",
+          "projects": {
+            "edges": [
+              {
+                "node": {
+                  "id": "p-support",
+                  "name": "support-bot",
+                  "deletedAt": null,
+                  "environments": {
+                    "edges": [
+                      {
+                        "node": {
+                          "id": "e-prod",
+                          "name": "production",
+                          "canAccess": true,
+                          "serviceInstances": {
+                            "edges": [
+                              { "node": { "serviceId": "s-api" } },
+                              { "node": { "serviceId": "s-worker" } }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "node": {
+                          "id": "e-stg",
+                          "name": "staging",
+                          "canAccess": true,
+                          "serviceInstances": {
+                            "edges": [{ "node": { "serviceId": "s-api" } }]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "services": {
+                    "edges": [
+                      { "node": { "id": "s-api", "name": "api" } },
+                      { "node": { "id": "s-worker", "name": "worker" } }
+                    ]
+                  }
+                }
+              },
+              {
+                "node": {
+                  "id": "p-old",
+                  "name": "deleted-project",
+                  "deletedAt": "2026-01-01T00:00:00.000Z",
+                  "environments": { "edges": [] },
+                  "services": { "edges": [] }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "externalWorkspaces": [
+      {
+        "id": "ws-team",
+        "name": "Acme",
+        "projects": [
+          {
+            "id": "p-landing",
+            "name": "landing",
+            "deletedAt": null,
+            "environments": {
+              "edges": [
+                {
+                  "node": {
+                    "id": "e-landing-prod",
+                    "name": "production",
+                    "canAccess": true,
+                    "serviceInstances": {
+                      "edges": [{ "node": { "serviceId": "s-web" } }]
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "id": "e-locked",
+                    "name": "restricted",
+                    "canAccess": false,
+                    "serviceInstances": {
+                      "edges": [{ "node": { "serviceId": "s-web" } }]
+                    }
+                  }
+                }
+              ]
+            },
+            "services": {
+              "edges": [{ "node": { "id": "s-web", "name": "web" } }]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

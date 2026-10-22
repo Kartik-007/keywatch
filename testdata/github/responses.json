@@ -1,0 +1,35 @@
+{
+  "/repos/acme/support-bot/actions/secrets": {
+    "total_count": 3,
+    "secrets": [
+      { "name": "ANTHROPIC_API_KEY", "created_at": "2026-01-10T10:00:00Z", "updated_at": "2026-01-10T10:00:00Z" },
+      { "name": "DEPLOY_TOKEN", "created_at": "2026-02-01T10:00:00Z", "updated_at": "2026-02-01T10:00:00Z" },
+      { "name": "OPENAI_API_KEY", "created_at": "2025-06-15T10:00:00Z", "updated_at": "2025-06-15T10:00:00Z" }
+    ]
+  },
+  "/repos/acme/support-bot/environments": {
+    "total_count": 3,
+    "environments": [
+      { "id": 1, "name": "production" },
+      { "id": 2, "name": "staging/eu" },
+      { "id": 3, "name": "broken" }
+    ]
+  },
+  "/repos/acme/support-bot/environments/production/secrets": {
+    "total_count": 2,
+    "secrets": [
+      { "name": "OPENAI_API_KEY", "created_at": "2026-03-01T10:00:00Z", "updated_at": "2026-03-01T10:00:00Z" },
+      { "name": "SENTRY_DSN", "created_at": "2026-03-01T10:00:00Z", "updated_at": "2026-03-01T10:00:00Z" }
+    ]
+  },
+  "/repos/acme/support-bot/environments/staging%2Feu/secrets": {
+    "total_count": 1,
+    "secrets": [
+      { "name": "claude_api_key", "created_at": "2026-04-01T10:00:00Z", "updated_at": "2026-04-01T10:00:00Z" }
+    ]
+  },
+  "/repos/acme/support-bot/environments/broken/secrets": {
+    "status": 500,
+    "message": "Server Error"
+  }
+}
