@@ -1,0 +1,33 @@
+version: 2
+project_name: keywatch
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+builds:
+  - main: ./cmd/keywatch
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{.Version}}"]
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+checksum:
+  name_template: checksums.txt
+changelog:
+  use: github
+homebrew_casks:
+  - name: keywatch
+    repository:
+      owner: Kartik-007
+      name: homebrew-tap
+    homepage: https://github.com/Kartik-007/keywatch
+    description: Find every AI API key you've deployed, see what it spends, get pinged when it spikes.
+    license: MIT
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/keywatch"]
+          end
