@@ -1,0 +1,44 @@
+# Written by `keywatch watch`. Every hour this checks what each AI key spent.
+# When spend looks wrong the job fails, so GitHub emails you within the hour.
+# Re-run `keywatch watch` to change it. Source: https://github.com/Kartik-007/keywatch
+name: keywatch
+on:
+  schedule:
+    # A few minutes past the hour, so providers have reported the last hour.
+    - cron: "17 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: keywatch
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KEYWATCH_VERSION: "0.1.0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install keywatch
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          base="https://github.com/Kartik-007/keywatch/releases/download/v${KEYWATCH_VERSION}"
+          tarball="keywatch_${KEYWATCH_VERSION}_linux_amd64.tar.gz"
+          sums="keywatch_${KEYWATCH_VERSION}_checksums.txt"
+          curl -fsSLO "$base/$tarball"
+          curl -fsSLO "$base/$sums"
+          grep " ${tarball}\$" "$sums" | sha256sum --check --strict
+          mkdir -p bin
+          tar -xzf "$tarball" -C bin keywatch
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - name: Check spend
+        run: keywatch watch run --scary-day 50
+        env:
+          KEYWATCH_OPENAI_ADMIN_KEY: ${{ secrets.KEYWATCH_OPENAI_ADMIN_KEY }}
+          KEYWATCH_ANTHROPIC_ADMIN_KEY: ${{ secrets.KEYWATCH_ANTHROPIC_ADMIN_KEY }}
+          KEYWATCH_WEBHOOK: ${{ secrets.KEYWATCH_WEBHOOK }}
+          KEYWATCH_VARS: ${{ toJSON(vars) }}
