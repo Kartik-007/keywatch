@@ -122,14 +122,6 @@ func printConnectHint(r inventory.Result) {
 	fmt.Println()
 }
 
-func hasProvider(keys []core.Key, p string) bool {
-	for _, k := range keys {
-		if k.Provider == p {
-			return true
-		}
-	}
-	return false
-}
 
 func printStatusJSON(r inventory.Result) error {
 	out := struct {

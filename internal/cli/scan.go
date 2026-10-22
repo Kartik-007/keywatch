@@ -13,7 +13,6 @@ import (
 	"github.com/Kartik-007/keywatch/internal/findings"
 	"github.com/Kartik-007/keywatch/internal/inventory"
 	"github.com/Kartik-007/keywatch/internal/provider"
-	"github.com/Kartik-007/keywatch/internal/source"
 	"github.com/Kartik-007/keywatch/internal/ui"
 	"github.com/spf13/cobra"
 )
@@ -34,29 +33,12 @@ func runScan(cmd *cobra.Command, _ []string) error {
 		fmt.Println()
 	}
 
-	// One question for every platform login found on this machine.
-	var logins []string
-	for _, s := range source.All() {
-		if s.Name() != "local" && s.Available() {
-			logins = append(logins, platformNames[s.Name()])
-		}
-	}
-	readPlatforms := false
-	if len(logins) > 0 {
-		readPlatforms = Yes || JSON
-		if !readPlatforms {
-			fmt.Printf("  You're logged into %s on this machine.\n", joinAnd(logins))
-			readPlatforms = ui.Confirm("Read env vars from them too? (read-only)", true)
-			fmt.Println()
-		}
-	}
-
 	r := inventory.Load(ctx, inventory.Options{
-		UseSource: func(source.Source) bool { return readPlatforms },
+		UseSource: askPlatforms(),
 		Spend:     true,
 	})
 	cfg, _ := config.Load(".")
-	applyLabels(r.Keys, cfg)
+	applyLabels(r.Keys)
 	fs := findings.From(r, cfg, time.Now())
 
 	if JSON {
@@ -162,13 +144,6 @@ func printKey(k core.Key) {
 	fmt.Println()
 }
 
-func applyLabels(keys []core.Key, cfg *config.Config) {
-	for i := range keys {
-		if l, ok := cfg.Labels[keys[i].ID]; ok {
-			keys[i].Label = l
-		}
-	}
-}
 
 func jsonKeys(keys []core.Key) []map[string]any {
 	var out []map[string]any

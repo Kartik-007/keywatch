@@ -189,11 +189,3 @@ func runEnable(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func contains(list []string, s string) bool {
-	for _, x := range list {
-		if x == s {
-			return true
-		}
-	}
-	return false
-}
