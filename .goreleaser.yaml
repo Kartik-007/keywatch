@@ -10,11 +10,10 @@ builds:
     goos: [darwin, linux]
     goarch: [amd64, arm64]
     ldflags: ["-s -w -X main.version={{.Version}}"]
+# Default asset names (keywatch_<ver>_<os>_<arch>.tar.gz and
+# keywatch_<ver>_checksums.txt) are what the generated watch workflow downloads.
 archives:
   - formats: [tar.gz]
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-checksum:
-  name_template: checksums.txt
 changelog:
   use: github
 homebrew_casks:

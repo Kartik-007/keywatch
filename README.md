@@ -57,7 +57,7 @@ Demo mode runs offline against a made-up startup with obviously fake keys.
 
 ## What it touches
 
-Every run says which access level it's at, and ends with a receipt of what it read and what it changed (usually nothing).
+Every run ends with a receipt of what it read and what it changed (usually nothing). `keywatch status` also shows which access level you're at.
 
 | Level | Can do | Turned on by |
 |---|---|---|
@@ -82,6 +82,7 @@ Every run says which access level it's at, and ends with a receipt of what it re
 - Rotating a key is coming in v0.2. Today keywatch can disable one and tell you what will stop working.
 - It doesn't replace a gateway like [LiteLLM](https://github.com/BerriAI/litellm). keywatch reads usage after the fact and can't block a request. If you need hard limits per request, put a gateway in front.
 - v0.1 covers OpenAI and Anthropic keys on Railway, Vercel, GitHub and local files.
+- The macOS binary isn't signed or notarized yet. The Homebrew install clears the download quarantine flag so it runs; if you'd rather not, build from source with `go install github.com/Kartik-007/keywatch/cmd/keywatch@latest`.
 
 ## How it compares
 
@@ -108,7 +109,7 @@ keywatch joins all four views into one row per key.
 | `keywatch disable <key>` | Turn a key off, after showing what will break |
 | `keywatch enable <key>` | Turn an Anthropic key back on (OpenAI deletes are permanent) |
 | `keywatch check` | Exit non-zero if a key is committed to git. For CI and pre-commit |
-| `keywatch ignore <finding> --reason "…"` | Record a decision in `.keywatch.toml` so the team shares it |
+| `keywatch ignore <finding> <key> --reason "…"` | Record a decision in `.keywatch.toml` so the team shares it |
 | `keywatch forget [provider]` | Delete stored admin keys and local state |
 
 Global flags: `--json`, `--verbose`, `--demo`, `--yes` (answers read-only prompts; it never applies to changes).

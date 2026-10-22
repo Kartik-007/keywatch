@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"os/exec"
 	"runtime"
 	"time"
@@ -12,8 +11,6 @@ import (
 	"github.com/Kartik-007/keywatch/internal/core"
 	"github.com/Kartik-007/keywatch/internal/creds"
 	"github.com/Kartik-007/keywatch/internal/provider"
-	"github.com/Kartik-007/keywatch/internal/provider/anthropic"
-	"github.com/Kartik-007/keywatch/internal/provider/openai"
 	"github.com/Kartik-007/keywatch/internal/ui"
 	"github.com/spf13/cobra"
 )
@@ -28,18 +25,6 @@ var connectCmd = &cobra.Command{
 
 func init() {
 	Root.AddCommand(connectCmd)
-	// Provider HTTP clients: identify as keywatch/<version> and, with
-	// --verbose, log every call (method + host + path only).
-	cobra.OnInitialize(func() {
-		ua := "keywatch/" + Root.Version
-		openai.UserAgent, anthropic.UserAgent = ua, ua
-		if Verbose {
-			logf := func(format string, a ...any) {
-				fmt.Fprintln(os.Stderr, ui.Dim.Render("  → "+fmt.Sprintf(format, a...)))
-			}
-			openai.Logf, anthropic.Logf = logf, logf
-		}
-	})
 }
 
 var apiHost = map[string]string{
