@@ -25,4 +25,8 @@ Sleep 500ms
 Type "keywatch --demo status"
 Sleep 600ms
 Enter
+Sleep 2s
+Type "y"
+Sleep 400ms
+Enter
 Sleep 6s

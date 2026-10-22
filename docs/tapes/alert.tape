@@ -10,7 +10,7 @@ Require keywatch
 
 Set Shell "bash"
 Set FontSize 16
-Set Width 1200
+Set Width 1360
 Set Height 620
 Set Padding 24
 Set Theme "GitHub Dark"

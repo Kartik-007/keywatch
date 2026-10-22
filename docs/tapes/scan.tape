@@ -3,7 +3,6 @@
 #   go install ./cmd/keywatch && vhs docs/tapes/scan.tape
 # Demo mode is offline and uses obviously fake keys.
 
-Output docs/demo.gif
 Output docs/scan.gif
 
 Require keywatch
@@ -11,7 +10,7 @@ Require keywatch
 Set Shell "bash"
 Set FontSize 16
 Set Width 1200
-Set Height 680
+Set Height 860
 Set Padding 24
 Set Theme "GitHub Dark"
 Set TypingSpeed 45ms

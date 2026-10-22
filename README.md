@@ -2,7 +2,7 @@
 
 keywatch is a free command-line tool that finds the OpenAI and Anthropic keys you've deployed, shows where each one lives and what it spends, and pings you when spend jumps.
 
-![keywatch scanning a demo project](docs/demo.gif)
+![keywatch scanning a demo project](docs/scan.gif)
 
 ## Why
 
